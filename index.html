@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Curso: ¿Cómo Funcionan los Consejos Comunitarios?</title>
+    
+    <style>
+        /* Estilos generales y de fuente */
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+        :root {
+            --color-primario: #005A87; /* Azul oscuro */
+            --color-secundario: #009B77; /* Verde menta */
+            --color-fondo: #f4f8f9;
+            --color-texto: #333333;
+            --color-blanco: #ffffff;
+            --color-advertencia: #FFFBEB;
+            --color-borde-advertencia: #FDE68A;
+            --color-error: #FEF2F2;
+            --color-borde-error: #FECACA;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--color-fondo);
+            color: var(--color-texto);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Contenedor principal del curso */
+        .contenedor-curso {
+            max-width: 500px;
+            width: 100%;
+            background-color: var(--color-blanco);
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Cabecera */
+        .cabecera-curso {
+            background-color: var(--color-primario);
+            color: var(--color-blanco);
+            padding: 20px;
+            text-align: center;
+        }
+
+        .cabecera-curso h1 {
+            margin: 0;
+            font-size: 1.5em;
+        }
+
+        /* Contenido de los pasos */
+        .contenido-pasos {
+            padding: 25px 30px;
+        }
+        
+        /* Estilo de cada paso individual */
+        .paso {
+            display: none; /* Ocultos por defecto */
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .paso.activo {
+            display: block; /* Visible cuando está activo */
+        }
+
+        .paso-titulo {
+            display: flex;
+            align-items: center;
+            color: var(--color-primario);
+            margin-bottom: 20px;
+        }
+        
+        .paso-titulo svg {
+            width: 40px;
+            height: 40px;
+            margin-right: 15px;
+            fill: var(--color-primario);
+        }
+
+        .paso-titulo h2 {
+            margin: 0;
+            font-size: 1.3em;
+        }
+
+        .paso-contenido p {
+            line-height: 1.6;
+            font-size: 1em;
+            margin-bottom: 15px;
+        }
+
+        /* Bloques especiales: advertencias y consejos */
+        .bloque-especial {
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+            border-left: 5px solid;
+        }
+
+        .advertencia {
+            background-color: var(--color-advertencia);
+            border-color: var(--color-borde-advertencia);
+        }
+        
+        .error-comun {
+            background-color: var(--color-error);
+            border-color: var(--color-borde-error);
+        }
+        
+        .bloque-especial strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        /* Barra de progreso */
+        .progreso {
+            padding: 0 30px;
+        }
+        .barra-progreso-fondo {
+            width: 100%;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            height: 10px;
+        }
+
+        .barra-progreso-avance {
+            width: 0%;
+            height: 10px;
+            background-color: var(--color-secundario);
+            border-radius: 5px;
+            transition: width 0.3s ease-in-out;
+        }
+        
+        #contador-pasos {
+            text-align: center;
+            font-size: 0.9em;
+            color: #777;
+            margin-top: 8px;
+        }
+
+        /* Navegación (botones) */
+        .navegacion {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px 30px;
+            border-top: 1px solid #eee;
+            background-color: #fcfcfc;
+        }
+
+        .btn-nav {
+            background-color: var(--color-secundario);
+            color: var(--color-blanco);
+            border: none;
+            padding: 12px 25px;
+            font-size: 1em;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.2s;
+        }
+
+        .btn-nav:hover {
+            background-color: #007a5f;
+            transform: translateY(-2px);
+        }
+        
+        .btn-nav:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        #btn-anterior {
+            background-color: #a0a0a0;
+        }
+        
+        #btn-anterior:not(:disabled):hover {
+            background-color: #888888;
+        }
+
+        /* Animación de entrada */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="contenedor-curso">
+        
+        <header class="cabecera-curso">
+            <h1>Consejos Comunitarios en Colombia</h1>
+        </header>
+
+        <main class="contenido-pasos">
+
+            <div id="paso-1" class="paso activo">
+                <div class="paso-titulo">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
+                    <h2>¡Bienvenida y Bienvenido!</h2>
+                </div>
+                <div class="paso-contenido">
+                    <p>Imagina que tu comunidad es un gran equipo. Para que el equipo funcione bien, necesita reglas y líderes que todos acepten. </p>
+                    <p>Un <strong>Consejo Comunitario</strong> es precisamente eso: la forma en que las comunidades negras, afrocolombianas, raizales y palenqueras se organizan para proteger su cultura, su territorio y tomar sus propias decisiones.</p>
+                    <p>¡Con este curso, entenderás cómo funciona de una forma muy sencilla!</p>
+                </div>
+            </div>
+
+            <div id="paso-2" class="paso">
+                <div class="paso-titulo">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2L1 21h22L12 2zm-1 15v-4h2v4h-2zm0-6V7h2v4h-2z"/></svg>
+                    <h2>¿Quiénes Pueden Formarlos?</h2>
+                </div>
+                <div class="paso-contenido">
+                    <p>Los Consejos Comunitarios son una figura especial creada por la <strong>Ley 70 de 1993</strong> para proteger los derechos de las comunidades que tienen una fuerte identidad cultural propia.</p>
+                    <p>Estos consejos son principalmente para:</p>
+                    <ul>
+                        <li>Comunidades Negras y Afrocolombianas.</li>
+                        <li>Comunidades Raizales (de San Andrés y Providencia).</li>
+                        <li>Comunidades Palenqueras (como la de San Basilio de Palenque).</li>
+                    </ul>
+                    <div class="bloque-especial advertencia">
+                        <strong>¡Dato Clave!</strong>
+                        No cualquier grupo de vecinos puede formar un Consejo Comunitario. Es un derecho especial para proteger la cultura y el territorio de estas comunidades específicas.
+                    </div>
+                </div>
+            </div>
+
+            <div id="paso-3" class="paso">
+                <div class="paso-titulo">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 6h-2v9H6v2c0 .55.45 1 1 1h11l4 4V7c0-.55-.45-1-1-1zm-4 6V4c0-.55-.45-1-1-1H3c-.55 0-1 .45-1 1v14l4-4h10c.55 0 1-.45 1-1z"/></svg>
+                    <h2>El Corazón: La Asamblea General</h2>
+                </div>
+                <div class="paso-contenido">
+                    <p>Imagina que la comunidad quiere construir un parque para los niños. ¿Quién decide dónde ponerlo y cómo será?</p>
+                    <p>¡Todos juntos en la <strong>Asamblea General</strong>!</p>
+                    <p>La Asamblea es como una gran reunión familiar donde cada miembro de la comunidad tiene voz y voto. Es la máxima autoridad, ¡la jefa de todas las decisiones importantes!</p>
+                    <p>En la Asamblea se decide:</p>
+                    <ul>
+                        <li>Las reglas de la comunidad.</li>
+                        <li>Quiénes serán los representantes (la Junta).</li>
+                        <li>Qué hacer con el territorio colectivo.</li>
+                        <li>Cómo resolver los problemas.</li>
+                    </ul>
+                    <p>Es el espacio más importante porque garantiza que las decisiones las tome la gente, y no una sola persona.</p>
+                </div>
+            </div>
+
+            <div id="paso-4" class="paso">
+                <div class="paso-titulo">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V18c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-1.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-1.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+                    <h2>La Junta: Los Representantes</h2>
+                </div>
+                <div class="paso-contenido">
+                    <p>Como la Asamblea no puede estar reunida todos los días, elige un grupo de personas para que ejecuten las decisiones y representen a la comunidad. Este grupo se llama la <strong>Junta del Consejo Comunitario</strong>.</p>
+                    <p>La Junta es como el "equipo de capitanes" elegido por todos los jugadores. Su trabajo es:</p>
+                    <ul>
+                        <li>Ser el representante legal de la comunidad.</li>
+                        <li>Administrar los proyectos aprobados por la Asamblea.</li>
+                        <li>Hablar en nombre de la comunidad con alcaldías, gobernaciones y otras entidades.</li>
+                        <li>Rendir cuentas a la Asamblea de todo lo que hacen.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div id="paso-5" class="paso">
+                <div class="paso-titulo">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 17.13l-6-2.1V5.07l6 2.1v9.96z"/></svg>
+                    <h2>El Territorio: ¡Es de Todos!</h2>
+                </div>
+                <div class="paso-contenido">
+                    <p>Una de las cosas más importantes que protege un Consejo Comunitario es el <strong>territorio colectivo</strong>. </p>
+                    <p>Esto significa que la tierra no pertenece a una sola persona, sino a toda la comunidad. Es de los abuelos, de los padres, de los hijos y de los que vendrán.</p>
+                    
+                    <div class="bloque-especial error-comun">
+                        <strong>¡Error Común!</strong>
+                        Pensar que se puede vender un "pedacito" de la tierra colectiva. ¡Esto es imposible! El territorio es inalienable, lo que significa que no se puede vender, embargar ni dividir entre individuos. Pertenece al colectivo para siempre.
+                    </div>
+                    <p>El Consejo administra este territorio según las tradiciones y las decisiones de la Asamblea, asegurando que se use de forma sostenible para el bien de todos.</p>
+                </div>
+            </div>
+            
+            <div id="paso-6" class="paso">
+                <div class="paso-titulo">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                    <h2>¡Felicitaciones! Ya lo Entiendes</h2>
+                </div>
+                <div class="paso-contenido">
+                    <p>¡Has completado el curso! Ahora sabes los puntos clave del funcionamiento de un Consejo Comunitario.</p>
+                    <p><strong>En resumen:</strong></p>
+                    <ol>
+                        <li>Son para <strong>comunidades étnicas</strong> con cultura propia.</li>
+                        <li>La <strong>Asamblea General</strong> es la máxima autoridad (¡la voz del pueblo!).</li>
+                        <li>La <strong>Junta</strong> es elegida para representar y ejecutar.</li>
+                        <li>El <strong>territorio es colectivo</strong> y no se puede vender.</li>
+                    </ol>
+                    <p>Los Consejos Comunitarios son una herramienta poderosa para que las comunidades protejan su legado y construyan su futuro. ¡Comparte lo que aprendiste!</p>
+                </div>
+            </div>
+
+        </main>
+
+        <div class="progreso">
+            <div class="barra-progreso-fondo">
+                <div id="barra-progreso" class="barra-progreso-avance"></div>
+            </div>
+            <div id="contador-pasos"></div>
+        </div>
+        
+        <footer class="navegacion">
+            <button id="btn-anterior" class="btn-nav" onclick="cambiarPaso(-1)">Anterior</button>
+            <button id="btn-siguiente" class="btn-nav" onclick="cambiarPaso(1)">Siguiente</button>
+        </footer>
+
+    </div>
+
+    <script>
+        let pasoActual = 1;
+        const totalPasos = 6;
+
+        // Función para mostrar el paso correcto y actualizar controles
+        function mostrarPaso(numPaso) {
+            // Ocultar el paso que estaba activo
+            const pasoActivoAnterior = document.querySelector('.paso.activo');
+            if (pasoActivoAnterior) {
+                pasoActivoAnterior.classList.remove('activo');
+            }
+
+            // Mostrar el nuevo paso
+            const nuevoPasoActivo = document.getElementById('paso-' + numPaso);
+            if (nuevoPasoActivo) {
+                nuevoPasoActivo.classList.add('activo');
+            }
+
+            // Actualizar botones
+            const btnAnterior = document.getElementById('btn-anterior');
+            const btnSiguiente = document.getElementById('btn-siguiente');
+
+            btnAnterior.disabled = (numPaso === 1);
+            btnSiguiente.disabled = (numPaso === totalPasos);
+
+            // Cambiar texto del botón siguiente en el último paso
+            if (numPaso === totalPasos) {
+                btnSiguiente.textContent = 'Finalizar';
+            } else {
+                btnSiguiente.textContent = 'Siguiente';
+            }
+            
+            // Actualizar barra de progreso y contador
+            const progreso = ((numPaso - 1) / (totalPasos - 1)) * 100;
+            document.getElementById('barra-progreso').style.width = progreso + '%';
+            document.getElementById('contador-pasos').textContent = `Paso ${numPaso} de ${totalPasos}`;
+        }
+
+        // Función para cambiar de paso
+        function cambiarPaso(direccion) {
+            const nuevoPaso = pasoActual + direccion;
+
+            if (nuevoPaso >= 1 && nuevoPaso <= totalPasos) {
+                pasoActual = nuevoPaso;
+                mostrarPaso(pasoActual);
+            }
+        }
+
+        // Inicializar el curso en el primer paso al cargar la página
+        document.addEventListener('DOMContentLoaded', function() {
+            mostrarPaso(pasoActual);
+        });
+    </script>
+
+</body>
+</html>
